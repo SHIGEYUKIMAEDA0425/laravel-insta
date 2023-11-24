@@ -1,12 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-
 class HomeController extends Controller
 {
     private $post;
@@ -21,7 +18,6 @@ class HomeController extends Controller
         $this->post = $post;
         $this->user = $user;
     }
-
     /**
      * Show the application dashboard.
      *
@@ -29,57 +25,59 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $home_posts     = $this->getHomePosts();
+        $home_posts = $this->getHomePosts();
         $suggested_users = $this->getSuggestedUsers();
-
         return view('users.home')
-                    ->with('home_posts', $home_posts)
-                    ->with('suggested_users', $suggested_users);
+                ->with('home_posts', $home_posts)
+                ->with('suggested_users', $suggested_users);
     }
-
     #Get the posts of the users that the Auth user is following
     private function getHomePosts()
     {
         $all_posts = $this->post->latest()->get();
-        $home_posts = []; //In case the $home_posts, it will not return NULL, but empty
-
+        $home_posts = []; // In case the $home_posts is empty, it will not return null but empty instead
         foreach($all_posts as $post){
             if($post->user->isFollowed() || $post->user->id === Auth::user()->id){
                 $home_posts[] = $post;
             }
         }
-
         return $home_posts;
     }
-
-    #Get the users that the Auth user is not following
+    // private function getSuggestedUsers()
+    // {
+    //     $all_users = $this->user->all()->except(Auth::user()->id);
+    //     $suggested_users = [];
+    //     foreach($all_users as $user){
+    //         if(!$user->isFollowed()){
+    //             $suggested_users[] = $user;
+    //         }
+    //     }
+    //     return array_slice($suggested_users, 0, 5);
+    //     // array_slice(x,y,z)
+    //     // x - array
+    //     // y - offset/starting index
+    //     // z - length/ how many
+    // }
+    # Get the users that the Auth user is NOT following
     private function getSuggestedUsers()
     {
         $all_users = $this->user->all()->except(Auth::user()->id);
         $suggested_users = [];
-
-        foreach($all_users as $user){
-            if(!$user->isFollowed()){
+        foreach ($all_users as $user){
+            // if the Auth user is NOT following the $user, save the user inside $suggested_users
+            if (!$user->isFollowed()){
                 $suggested_users[] = $user;
             }
         }
-
-        return array_slice($suggested_users, 0, 5);
-        //array_slice(x,y,z)
-        //x -- array
-        //y -- offset/starting index
-        //z -- length/how many
+        return $suggested_users;
     }
-
-    public function search(Request $request)
-    {
+    public function search(Request $request){
         $users = $this->user->where('name', 'like', '%'.$request->search.'%')->get();
         return view('users.search')->with('users', $users)->with('search', $request->search);
     }
-
-    public function suggestion()
+    public function suggestions()
     {
-        $suggested_users = $this->user->paginate(3)->except(Auth::user()->id);
-        return view('users.suggestion')->with('suggested_users', $suggested_users);
+        $suggested_users = $this->getSuggestedUsers();
+        return view('users.suggestions')->with('suggested_users', $suggested_users);
     }
 }
