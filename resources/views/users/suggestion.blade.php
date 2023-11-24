@@ -41,7 +41,7 @@
                 <p class="lead text-muted text-center">No users found.</p>
             @endforelse
 
-            {{ $suggested_users->link(); }}
+            {{ $suggested_users->links() }}
         </div>
     </div>
 @endsection
