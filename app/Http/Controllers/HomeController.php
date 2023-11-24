@@ -79,15 +79,6 @@ class HomeController extends Controller
 
     public function suggestion()
     {
-        $all_users = $this->user->all()->except(Auth::user()->id);
-        $suggested_users = [];
-
-        foreach($all_users as $user){
-            if(!$user->isFollowed()){
-                $suggested_users[] = $user;
-            }
-        }
-
-        return array_slice($suggested_users, 0, 5);
+        return view('users.suggestion');
     }
 }
