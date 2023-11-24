@@ -79,6 +79,6 @@ class HomeController extends Controller
 
     public function getAllSuggestedUsers()
     {
-        return view('suggested.blade.php');
+        return view('users.suggested');
     }
 }
