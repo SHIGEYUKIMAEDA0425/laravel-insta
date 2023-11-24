@@ -5,7 +5,7 @@
 @section('content')
     <div class="row justify-content-center">
         <div class="col-5">
-            @forelse ($users as $user)
+            @forelse ($suggested_users as $user)
                 <div class="row align-items-center mb-3">
                     <div class="col-auto">
                         <a href="{{ route('profile.show', $user->id) }}">
@@ -40,6 +40,8 @@
             @empty
                 <p class="lead text-muted text-center">No users found.</p>
             @endforelse
+
+            {{ $suggested_users->link(); }}
         </div>
     </div>
 @endsection

@@ -79,6 +79,7 @@ class HomeController extends Controller
 
     public function suggestion()
     {
-        return view('users.suggestion');
+        $suggested_users = $this->user->paginate(3);
+        return view('users.suggestion')->with('suggested_users', $suggested_users);
     }
 }
