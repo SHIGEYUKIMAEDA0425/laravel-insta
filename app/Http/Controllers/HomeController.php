@@ -76,4 +76,9 @@ class HomeController extends Controller
         $users = $this->user->where('name', 'like', '%'.$request->search.'%')->get();
         return view('users.search')->with('users', $users)->with('search', $request->search);
     }
+
+    public function getAllSuggestedUsers()
+    {
+        return view('suggested.blade.php');
+    }
 }

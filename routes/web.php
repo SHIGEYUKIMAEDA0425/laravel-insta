@@ -30,7 +30,7 @@ Route::group(['middleware' => 'auth'], function(){ //closure function
 
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/people', [HomeController::class, 'search'])->name('search');
-    Route::get('/suggested_people', [HomeController::class, 'getSuggestedUsers'])->name('getSuggestedUsers');
+    Route::get('/suggested_people', [HomeController::class, 'getAllSuggestedUsers'])->name('getAllSuggestedUsers');
 
     //POST
     Route::get('/post/create', [PostController::class, 'create'])->name('post.create');
